@@ -79,7 +79,7 @@ origins = [
     "http://localhost:8080",
     "http://localhost:5173", # для Vite
     "https://web.telegram.org",
-    "https://kosynka.local"
+    settings.MINI_APP_URL
 ]
 app.add_middleware(
     CORSMiddleware,
