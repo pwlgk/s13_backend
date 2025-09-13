@@ -125,7 +125,7 @@ scheduler.add_job(
 
 # --- Отладочный немедленный запуск ---
 # Чтобы протестировать, раскомментируйте нужную строку
-# scheduler.add_job(run_hot_schedule_sync, id='initial_hot_sync')
-# scheduler.add_job(run_cold_schedule_sync, id='initial_cold_sync')
+scheduler.add_job(run_hot_schedule_sync, id='initial_hot_sync')
+scheduler.add_job(run_cold_schedule_sync, id='initial_cold_sync')
 
 logger.info("Scheduler configured for optimized production mode (hot/cold sync).")

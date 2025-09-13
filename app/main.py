@@ -35,12 +35,12 @@ async def lifespan(app: FastAPI):
     logger.info("API process starting up...")
 
     # Удаляем старый вебхук (на случай, если он был) и устанавливаем команды
-    await bot.delete_webhook(drop_pending_updates=True)
-    await setup_bot_commands(bot)
+    # await bot.delete_webhook(drop_pending_updates=True)
+    # await setup_bot_commands(bot)
     
-    # Запускаем Long Polling для бота в фоновой задаче
-    polling_task = asyncio.create_task(dp.start_polling(bot), name="PollingTask")
-    logger.info("Bot polling has been started as a background task.")
+    # # Запускаем Long Polling для бота в фоновой задаче
+    # polling_task = asyncio.create_task(dp.start_polling(bot), name="PollingTask")
+    # logger.info("Bot polling has been started as a background task.")
 
     yield # Приложение готово к работе и принимает запросы
 

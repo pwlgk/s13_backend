@@ -7,6 +7,7 @@ import signal
 from typing import Coroutine
 
 import redis.asyncio as redis
+from app.bot.bot import bot, dp, setup_bot_commands
 
 # Импортируем компоненты нашей системы
 from app.worker import scheduler, run_hot_schedule_sync, run_dict_sync
@@ -63,38 +64,46 @@ async def listen_control_queue():
     logger.info("Control queue listener stopped.")
 
 
+
 async def main():
-    """Главная асинхронная функция для запуска всех фоновых задач воркера."""
+    """Главная функция для запуска всех фоновых задач воркера."""
     logger.info("Worker process starting...")
     
-    # Запускаем планировщик apscheduler
+    # 1. Устанавливаем команды бота (теперь это делает воркер)
+    await bot.delete_webhook(drop_pending_updates=True)
+    await setup_bot_commands(bot)
+
+    # 2. Запускаем APScheduler
     scheduler.start()
     logger.info("APScheduler has been started.")
     
-    # Создаем задачи для notifier и слушателя команд
+    # 3. Создаем задачи для notifier, listener'а команд и ПОЛЛИНГА
     notifier_task = asyncio.create_task(process_queues(bot), name="NotifierTask")
     control_task = asyncio.create_task(listen_control_queue(), name="ControlTask")
+    polling_task = asyncio.create_task(dp.start_polling(bot), name="PollingTask") # <-- ЗАПУСКАЕМ ПОЛЛИНГ ЗДЕСЬ
     
+    logger.info("Notifier, Control Listener, and Bot Polling have been started.")
+
     # Ожидаем сигнала на завершение
     await shutdown_event.wait()
     
     # Корректно завершаем все задачи
     logger.info("Shutting down worker process...")
-    
-    # Останавливаем планировщик, не дожидаясь завершения текущих задач
     scheduler.shutdown(wait=False)
     
-    # Отменяем асинхронные задачи
+    # Сначала останавливаем поллинг
+    await dp.stop_polling()
+    polling_task.cancel()
+    
+    # Затем остальные задачи
     notifier_task.cancel()
     control_task.cancel()
     
-    # Ожидаем их завершения
-    await asyncio.gather(notifier_task, control_task, return_exceptions=True)
+    await asyncio.gather(polling_task, notifier_task, control_task, return_exceptions=True)
     
-    # Закрываем сессию бота
     await bot.session.close()
-    
     logger.info("Worker process shut down gracefully.")
+
 
 
 if __name__ == "__main__":
