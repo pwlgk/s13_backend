@@ -6,7 +6,6 @@ import logging
 from typing import Dict, List
 from collections import defaultdict
 from datetime import date, timedelta, datetime
-
 import redis.asyncio as redis
 from aiogram import Bot
 from aiogram.enums import ParseMode
@@ -172,7 +171,7 @@ async def handle_lesson_reminder(bot: Bot, task: Dict):
 
 async def process_queues(bot: Bot):
     """Бесконечный цикл, который слушает все очереди Redis и распределяет задачи."""
-    redis_client = redis.from_url("redis://localhost:6379/0", decode_responses=True)
+    redis_client = redis.from_url(settings.REDIS_URL, decode_responses=True)
     queues_to_listen = [SCHEDULE_CHANGES_QUEUE, BROADCAST_QUEUE, CHAT_MESSAGES_QUEUE, REMINDERS_QUEUE]
     logger.info(f"Notifier task started. Listening to queues: {queues_to_listen}")
     

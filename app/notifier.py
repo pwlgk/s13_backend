@@ -8,7 +8,7 @@ from typing import Dict
 import redis.asyncio as redis
 from aiogram import Bot
 from aiogram.exceptions import TelegramAPIError
-
+from app.core.config import settings
 from app.core.config import settings
 from app.db.session import AsyncSessionLocal
 from app.crud.crud_user import get_users_by_group_id, get_all_active_users
@@ -20,7 +20,6 @@ logger = logging.getLogger("Notifier")
 
 # Константы для подключения к Redis
 # В идеале, REDIS_URL тоже должен быть в settings
-REDIS_URL = "redis://localhost:6379/0"
 SCHEDULE_CHANGES_QUEUE = "schedule_changes_queue"
 BROADCAST_QUEUE = "broadcast_queue"
 
@@ -113,7 +112,7 @@ async def handle_broadcast(bot: Bot, task: Dict):
 
 async def process_queues(bot: Bot):
     """Бесконечный цикл обработки нескольких очередей Redis."""
-    redis_client = redis.from_url(REDIS_URL, decode_responses=True)
+    redis_client = redis.from_url(settings.REDIS_URL, decode_responses=True)
     logger.info(f"Notifier started. Listening to queues: [{SCHEDULE_CHANGES_QUEUE}, {BROADCAST_QUEUE}]")
     
     while True:
