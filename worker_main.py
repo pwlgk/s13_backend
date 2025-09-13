@@ -8,7 +8,7 @@ from typing import Coroutine
 
 import redis.asyncio as redis
 from app.bot.bot import bot, dp, setup_bot_commands
-
+from app.core.config import settings
 # Импортируем компоненты нашей системы
 from app.worker import scheduler, run_hot_schedule_sync, run_dict_sync
 from app.bot.bot import bot
@@ -29,7 +29,7 @@ def _handle_shutdown_signal(*args):
 
 async def listen_control_queue():
     """Слушает очередь управляющих команд из Redis и запускает соответствующие задачи."""
-    redis_client = redis.from_url("redis://localhost:6379/0", decode_responses=True)
+    redis_client = redis.from_url(settings.REDIS_URL, decode_responses=True)
     logger.info(f"Listening for control commands on '{CONTROL_QUEUE}'...")
     
     while not shutdown_event.is_set():
