@@ -106,11 +106,11 @@ scheduler.add_job(
     run_hot_schedule_sync, 'interval', minutes=20, id='hot_schedule_sync',
     name='Синхронизация расписания (горячие группы)'
 )
-# Редко проверяем все остальные "холодные" группы (ежедневно в 4:30)
-scheduler.add_job(
-    run_cold_schedule_sync, 'cron', hour=4, minute=30, id='cold_schedule_sync',
-    name='Синхронизация расписания (холодные группы)'
-)
+# # Редко проверяем все остальные "холодные" группы (ежедневно в 4:30)
+# scheduler.add_job(
+#     run_cold_schedule_sync, 'cron', hour=4, minute=30, id='cold_schedule_sync',
+#     name='Синхронизация расписания (холодные группы)'
+# )
 
 # 3. Очистка старых записей (ежедневно в 4:00)
 scheduler.add_job(

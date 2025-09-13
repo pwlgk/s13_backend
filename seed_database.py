@@ -48,14 +48,14 @@ async def seed_data():
             return
 
         # --- Шаг 3: Синхронизация расписания для ВСЕХ групп ---
-        logger.info("Step 3: Syncing schedule for all groups. This may take a while...")
-        try:
-            # Вызываем наш основной метод синхронизации, передавая ему список всех групп
-            await sync_service.sync_schedules_for_groups(session, group_ids=all_group_ids)
-            logger.info("Step 3: Full schedule sync completed successfully.")
-        except Exception as e:
-            logger.error(f"Step 3 FAILED: An error occurred during schedule sync. Error: {e}", exc_info=True)
-            return
+        # logger.info("Step 3: Syncing schedule for all groups. This may take a while...")
+        # try:
+        #     # Вызываем наш основной метод синхронизации, передавая ему список всех групп
+        #     await sync_service.sync_schedules_for_groups(session, group_ids=all_group_ids)
+        #     logger.info("Step 3: Full schedule sync completed successfully.")
+        # except Exception as e:
+        #     logger.error(f"Step 3 FAILED: An error occurred during schedule sync. Error: {e}", exc_info=True)
+        #     return
 
     logger.info("--- Database Seeding Process Finished Successfully! ---")
 
