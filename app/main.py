@@ -47,16 +47,16 @@ async def lifespan(app: FastAPI):
     # --- ДЕЙСТВИЯ ПРИ ОСТАНОВКЕ ---
     logger.info("API process shutting down...")
     
-    if polling_task:
-        logger.info("Stopping polling...")
-        # Сначала вежливо просим aiogram остановиться
-        await dp.stop_polling()
-        # Затем отменяем asyncio задачу
-        polling_task.cancel()
-        try:
-            await polling_task
-        except asyncio.CancelledError:
-            logger.info("Polling task has been successfully cancelled.")
+    # if polling_task:
+    #     logger.info("Stopping polling...")
+    #     # Сначала вежливо просим aiogram остановиться
+    #     await dp.stop_polling()
+    #     # Затем отменяем asyncio задачу
+    #     polling_task.cancel()
+    #     try:
+    #         await polling_task
+    #     except asyncio.CancelledError:
+    #         logger.info("Polling task has been successfully cancelled.")
     
     # Закрываем сессии, используемые в API
     await bot.session.close()
