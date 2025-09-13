@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     ADMIN_TELEGRAM_IDS: str
 
     REDIS_HOST: str = "localhost"
-    REDIS_PORT: int = 6379
+    REDIS_PORT: int = 6380
     REDIS_DB: int = 0
     REDIS_URL: str = f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}"
 

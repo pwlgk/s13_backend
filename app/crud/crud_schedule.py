@@ -10,7 +10,7 @@ from app.models.schedule import Group, Lesson, Tutor
 from sqlalchemy import distinct
 from app.models.user import User
 from datetime import datetime, timedelta
-from app.core.config import settings
+
 
 async def get_all_groups_ids(db: AsyncSession) -> list[int]:
     """Возвравращает список ID всех групп из БД."""
@@ -233,8 +233,12 @@ async def get_lessons_starting_soon(db: AsyncSession, interval_minutes: int) -> 
     Находит все занятия, которые начнутся в заданном временном интервале от текущего момента.
     Например, interval_minutes=30 найдет занятия, начинающиеся через 29-30 минут.
     """
-    lesson_start_times = settings.lesson_times_map
-
+    # TODO: В идеале, время начала пар (08:45, 10:30) должно храниться в БД или конфиге.
+    # Пока захардкодим их здесь.
+    lesson_start_times = {
+        1: "08:45", 2: "10:30", 3: "12:45", 4: "14:30",
+        5: "16:15", 6: "18:00", 7: "19:45", 8: "21:30"
+    }
 
     now = datetime.now()
     # Ищем занятия, которые начнутся через `interval_minutes`
